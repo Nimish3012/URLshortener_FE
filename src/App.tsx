@@ -1,35 +1,51 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [url, setUrl] = useState("");
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
+    <div className="fixed inset-0 flex items-center justify-center bg-blue-500 px-4">
+      <div className="bg-white p-10 rounded-2xl shadow-lg w-full max-w-lg text-center">
+        <h1 className="text-3xl font-bold text-blue-600 mb-4">URL Shortener</h1>
+        <p className="text-gray-600 mb-6">
+          Paste your long URL and get a shortened version instantly.
         </p>
+        <input
+          type="text"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          placeholder="Enter your URL"
+          className="w-full border border-gray-400 text-black rounded-md px-4 py-3 mb-5 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+        />
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <button
+            onClick={async () => {
+              try {
+                const text = await navigator.clipboard.readText();
+                setUrl(text);
+              } catch (err) {
+                console.error('Failed to read clipboard contents:', err);
+              }
+            }}
+            className="bg-gray-100 hover:bg-gray-200 text-white px-6 py-2 rounded-md transition font-medium"
+          >
+            Paste
+          </button>
+          <button
+            onClick={async () => {
+              if (!url) {
+                alert('Please enter a URL');
+                return;
+              } }}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md transition font-medium"
+          >
+            Shorten
+          </button>
+        </div>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;
